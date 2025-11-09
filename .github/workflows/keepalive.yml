@@ -1,0 +1,26 @@
+name: Keep Workflow Alive
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"   # every 6 hours
+  workflow_dispatch:
+
+jobs:
+  keepalive:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: 🧱 Checkout repository
+        uses: actions/checkout@v4
+
+      - name: 🕒 Update heartbeat
+        run: |
+          mkdir -p .github
+          date -u > .github/last_heartbeat.txt
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+          git add .github/last_heartbeat.txt
+          git commit -m "Keep repo active ($(date -u '+%Y-%m-%d %H:%MZ'))" || echo "No changes"
+          git push
