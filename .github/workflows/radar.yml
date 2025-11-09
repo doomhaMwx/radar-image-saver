@@ -3,7 +3,7 @@ name: Fetch Radar Image Every 10 Minutes
 on:
   schedule:
     - cron: "*/10 * * * *"   # every 10 minutes (UTC)
-  workflow_dispatch:         # allows manual trigger
+  workflow_dispatch:         # allows manual trigger anytime
 
 jobs:
   fetch_radar:
@@ -32,6 +32,6 @@ jobs:
         run: |
           git config user.name "GitHub Actions Bot"
           git config user.email "actions@github.com"
-          git add radar_*.png
-          git commit -m "Add new radar image ($(date -u '+%Y-%m-%d %H:%MZ'))" || echo "No changes to commit"
-          git push
+          git add images/ || true
+          git commit -am "Add radar image ($(date -u '+%Y-%m-%d %H:%MZ'))" || echo "No changes to commit"
+          git push || echo "No push needed"
