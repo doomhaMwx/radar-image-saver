@@ -108,9 +108,17 @@ def plot_tile_on_map(img, lat, lon, zoom, timestamp, save=True):
     plt.title(f"Radar @ {dt.strftime('%Y-%m-%d %H:%MZ')}", color='white')
 
     if save:
-        filename = f"radar_{dt.strftime('%Y%m%d_%H%M')}_z{zoom}.png"
+        import os
+
+        # Inside plot_tile_on_map(), just before saving:
+        today = datetime.datetime.utcnow().strftime('%Y%m%d')
+        save_dir = f"images/{today}"
+        os.makedirs(save_dir, exist_ok=True)
+
+        filename = f"{save_dir}/radar_{dt.strftime('%Y%m%d_%H%M')}_z{zoom}.png"
         plt.savefig(filename, dpi=300, bbox_inches='tight', facecolor=fig.get_facecolor())
-        print(f"Saved image as {filename}")
+        print(f"✅ Saved image as {filename}")
+
 
     plt.close(fig)
 
@@ -129,3 +137,4 @@ if __name__ == "__main__":
             print("No image available.")
     except Exception as e:
         print("Error:", e)
+
